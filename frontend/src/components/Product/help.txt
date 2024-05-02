@@ -1,0 +1,51 @@
+import React from 'react';
+import {Canvas} from "@react-three/fiber";
+import { ARButton, XR } from '@react-three/xr';
+import ModelHit from './ModelHit';
+
+const Model = () => {
+    return (
+        <>
+            <ARButton sessionInit={{requiredFeatures:["hit-test"]}}/>
+            <Canvas dpr={[1,2]} shadows camera={{fov: 45}} style={{"position":"absolute"}}>
+                <XR>
+                    <ModelHit/>
+                </XR>
+            </Canvas>
+        </>
+    )
+}
+
+export default Model
+
+
+previous: 
+import React from 'react';
+import { useSelector } from 'react-redux';
+import {Canvas} from "@react-three/fiber";
+import {useGLTF, Stage, PresentationControls} from "@react-three/drei";
+
+const Model = () => {
+    const { product } = useSelector(
+        (state) => state.productDetails
+    );
+    const modelUrl = product.modelUrl
+
+    function Viewer(props){
+        const {scene} = useGLTF(modelUrl);
+        return <primitive object={scene} {...props}/>;
+    }
+
+    return (
+        <Canvas dpr={[1,2]} shadows camera={{fov: 45}} style={{"position":"absolute"}}>
+            <color attach="background" args={["#101010"]}/>
+            <PresentationControls speed={4} global zoom={0.5}>
+                <Stage intensity={0.2} environment={null}>
+                    <Viewer scale={0.01}/>
+                </Stage>
+            </PresentationControls>
+        </Canvas>
+    )
+}
+
+export default Model
